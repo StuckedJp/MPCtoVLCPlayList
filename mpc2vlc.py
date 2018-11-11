@@ -6,7 +6,7 @@ import os.path
 
 
 vlc_pl_templ = 'vlc_pl_templ.xml'
-vlc_pl_templ_ns = {
+namespaces = {
     'ns0': "http://xspf.org/ns/0/",
     'vlc': "http://www.videolan.org/vlc/playlist/ns/0/",
 }
@@ -14,7 +14,7 @@ extension_application = 'http://www.videolan.org/vlc/playlist/0'
 
 
 def show_usage():
-    print('USAGE: %s [INFILE]' % sys.argv[0])
+    print('USAGE: %s [INFILE...]' % sys.argv[0])
 
 
 def load_mpc(file_name):
@@ -48,9 +48,9 @@ def fix_path_name(pl_info):
 
 def save_vlc(file_name, pl_info):
     # load template
-    ns = vlc_pl_templ_ns
-    ElementTree.register_namespace('', vlc_pl_templ_ns['ns0'])
-    ElementTree.register_namespace('vlc', vlc_pl_templ_ns['vlc'])
+    ns = namespaces
+    ElementTree.register_namespace('', namespaces['ns0'])
+    ElementTree.register_namespace('vlc', namespaces['vlc'])
     tree = ElementTree.parse(vlc_pl_templ)
     root = tree.getroot()
 
@@ -68,27 +68,27 @@ def save_vlc(file_name, pl_info):
         # location
         media_path = 'file:///' + pl_info[key]['filename']
         track = ElementTree.SubElement(
-            track_list, '{http://xspf.org/ns/0/}track')
+            track_list, '{%s}track' % namespaces['ns0'])
         location = ElementTree.SubElement(
-            track, '{http://xspf.org/ns/0/}location')
+            track, '{%s}location' % namespaces['ns0'])
         location.text = media_path
 
         # extension
         extension = ElementTree.SubElement(
-            track, '{http://xspf.org/ns/0/}extension')
+            track, '{%s}extension' % namespaces['ns0'])
         extension.attrib['application'] = extension_application
 
         # vlc:id
         id_text = str(int(key) - 1)
         id_list.append(id_text)
         vlc_id = ElementTree.SubElement(
-            extension, '{http://www.videolan.org/vlc/playlist/ns/0/}id')
+            extension, '{%s}id' % namespaces['vlc'])
         vlc_id.text = id_text
 
     extension = root.findall('./ns0:extension', ns)[0]
     for tid in id_list:
         item = ElementTree.SubElement(
-            extension, '{http://www.videolan.org/vlc/playlist/ns/0/}item')
+            extension, '{%s}item' % namespaces['vlc'])
         item.attrib['tid'] = tid
 
     # ElementTree.dump(extension)
