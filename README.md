@@ -1,2 +1,2 @@
-# PlayList converter Media Player Classic Home Cinema to VLC media player
+# PlayList converter for Media Player Classic Home Cinema to VLC media player
 
