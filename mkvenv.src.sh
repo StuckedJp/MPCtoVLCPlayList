@@ -1,7 +1,7 @@
 #! /bin/bash
 
 PYTHON_VENV_NAME=Mpc2Vlc
-PYTHON_VERSION=3.6.6
+PYTHON_VERSION=3.7.3
 
 pyenv virtualenvs | grep $PYTHON_VENV_NAME > /dev/null
 found=$?
